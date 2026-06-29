@@ -148,6 +148,7 @@
     const preset = EABPresets.get(id);
     if (!preset) return;
 
+    const prevPreset = EABPresets.get(state.presetId);
     applyingPreset = true;
     state.presetId = id;
     state.monochrome = preset.monochrome === true;
@@ -162,6 +163,8 @@
     }
     if (preset.baseHex) {
       syncHexFromPicker(preset.baseHex);
+    } else if (prevPreset && prevPreset.baseHex) {
+      syncHexFromPicker(DEFAULT_BASE_HEX);
     }
     if (state.harmonyType === "brand-array") {
       clearHarmonyTabs();
@@ -178,8 +181,8 @@
       state.energy = preset.energy;
     }
 
-    applyingPreset = false;
     updateUI();
+    applyingPreset = false;
   }
 
   function resetBaseHex() {
