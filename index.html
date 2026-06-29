@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAB Color Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css?v=22">
+  <link rel="stylesheet" href="css/styles.css?v=22">
+</head>
+<body>
+  <div id="prototype-gate" class="gate-overlay" hidden>
+    <div class="gate-modal" role="dialog" aria-labelledby="gate-title" aria-modal="true">
+      <h2 id="gate-title">Prototype access</h2>
+      <p class="field__hint">Enter your EAB email address to continue.</p>
+      <form id="gate-form">
+        <div class="field">
+          <label class="field__label" for="gate-email">Email address</label>
+          <input class="input" type="text" id="gate-email" name="email" autocomplete="email" inputmode="email" required>
+          <p id="gate-error" class="gate-error" hidden>Use an email address that contains eab.com</p>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Continue</button>
+      </form>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <div class="page-header__brand">
+      <img src="assets/eab-color-dashboard-logo.svg" alt="" class="page-header__logo" width="48" height="48">
+      <h1>EAB Color Dashboard</h1>
+    </div>
+    <p>Generate systematic color palettes from a base color — harmonies, brand-safe ramps, and chart previews for Nav360 and Edify data visualization.</p>
+  </header>
+
+  <div class="split-layout">
+    <aside class="split-layout__aside">
+      <div class="card">
+        <h2 class="card__title">Base color</h2>
+
+        <div class="field">
+          <div class="field__label-row">
+            <label class="field__label" for="base-hex">Hex color</label>
+            <span class="tip-wrap">
+              <button type="button" class="info-tip" aria-describedby="tip-base-hex">?</button>
+              <span id="tip-base-hex" role="tooltip" class="gem-tooltip">Your brand or key color. Default is #0069BF. Harmonies derive anchor hues from this base.</span>
+            </span>
+          </div>
+          <div class="color-input-row">
+            <input type="color" id="base-color" value="#0069BF" aria-label="Color picker">
+            <div class="hex-input-wrap">
+              <input class="input" type="text" id="base-hex" value="#0069BF" spellcheck="false" autocomplete="off">
+              <button type="button" id="clear-base-hex" class="input-clear" aria-label="Reset to default" title="Reset to #0069BF">×</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card__title">Palette</h2>
+
+        <div class="field" id="character-fields">
+          <div class="field__label-row">
+            <span class="field__label" id="character-label">Palette tuning</span>
+            <span class="tip-wrap">
+              <button type="button" class="info-tip" aria-describedby="tip-character">?</button>
+              <span id="tip-character" role="tooltip" class="gem-tooltip">Lightness and saturation apply per slice after harmony picks hues. They do not change hue.</span>
+            </span>
+          </div>
+
+          <div class="slider-field">
+            <div class="slider-field__header">
+              <label class="slider-field__name" for="tonality-slider">Lightness</label>
+              <span id="tonality-value" class="slider-field__readout" aria-live="polite"></span>
+            </div>
+            <div class="slider-field__ends">
+              <span>Light</span>
+              <span>Deep</span>
+            </div>
+            <input type="range" id="tonality-slider" class="slider" min="0" max="100" value="40" aria-labelledby="character-label tonality-value">
+          </div>
+
+          <div class="slider-field">
+            <div class="slider-field__header">
+              <label class="slider-field__name" for="energy-slider">Saturation</label>
+              <span id="energy-value" class="slider-field__readout" aria-live="polite"></span>
+            </div>
+            <div class="slider-field__ends">
+              <span>Muted</span>
+              <span>Vibrant</span>
+            </div>
+            <input type="range" id="energy-slider" class="slider" min="0" max="100" value="50" aria-labelledby="character-label energy-value">
+          </div>
+
+          <p id="character-disabled-hint" class="field__hint field__hint--compact" hidden>Brand ramp uses fixed lightness steps.</p>
+        </div>
+
+        <div class="field" id="harmony-field">
+          <div class="field__label-row">
+            <span class="field__label" id="harmony-label">Harmony type</span>
+            <span class="tip-wrap">
+              <button type="button" class="info-tip" aria-describedby="tip-harmony">?</button>
+              <span id="tip-harmony" role="tooltip" class="gem-tooltip">Color-wheel geometry for categorical charts. See the wheel panel for a live diagram.</span>
+            </span>
+          </div>
+          <div class="tabs" data-tab-group="harmony" role="tablist" aria-labelledby="harmony-label">
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="monochromatic" title="Same hue as your base — lightness and saturation vary per slice (not grayscale)">Mono</button>
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="analogous" title="Neighbors within ~60°">Analogous</button>
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="complementary" title="Opposite hues, 180° apart">Comp</button>
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="split-complementary" title="Base plus adjacent-to-complement pair">Split</button>
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="triadic" title="Three hues 120° apart">Triadic</button>
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="tetradic" title="Four hues in a rectangle on the wheel (90° steps)">Tetradic</button>
+            <button type="button" class="tabs__tab tabs__tab--active" role="tab" aria-selected="true" data-value="double-triadic" title="Six hues 60° apart — two interleaved triads on the wheel (hexadic spacing)">2× Triadic</button>
+            <button type="button" class="tabs__tab" role="tab" aria-selected="false" data-value="double-tetradic" title="Eight hues 45° apart — octadic spacing. With 8 slices, charts lead with four saturated tetradic hues, then the four doubled offsets — not washed-out tints first.">2× Tetradic</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field__label-row">
+            <span class="field__label" id="presets-label">Presets</span>
+            <span class="tip-wrap">
+              <button type="button" class="info-tip" aria-describedby="tip-presets">?</button>
+              <span id="tip-presets" role="tooltip" class="gem-tooltip">Lightness and saturation recipes from your base hue — presets never shift hue. Switching a preset selects 2× triadic harmony (except Safe brand array and Orson Welles).</span>
+            </span>
+          </div>
+          <div id="preset-picker" class="preset-picker" role="radiogroup" aria-labelledby="presets-label"></div>
+        </div>
+      </div>
+
+      <div class="card card--export">
+        <h2 class="card__title">Copy-paste values</h2>
+
+        <textarea id="palette-output" class="output-area output-area--sidebar" readonly aria-label="Palette output"></textarea>
+
+        <div class="field field--export-format">
+          <div class="field__label-row">
+            <label class="field__label" for="output-format">Output format</label>
+            <span class="tip-wrap">
+              <button type="button" class="info-tip" aria-describedby="tip-output-format">?</button>
+              <span id="tip-output-format" role="tooltip" class="gem-tooltip">How the palette is formatted in the copy-paste area.</span>
+            </span>
+          </div>
+          <select class="input select" id="output-format">
+            <option value="json" selected>JSON</option>
+            <option value="hex">HEX list</option>
+            <option value="hsl">HSL list</option>
+            <option value="css">CSS custom properties</option>
+          </select>
+        </div>
+
+        <div class="copy-row">
+          <button type="button" id="copy-palette-btn" class="btn btn-primary">Copy palette</button>
+          <span id="copy-status" class="copy-status" aria-live="polite"></span>
+        </div>
+      </div>
+    </aside>
+
+    <article class="split-layout__article">
+      <div id="palette-alert" class="alert" hidden role="alert"></div>
+
+      <div class="card">
+        <p class="card__callout">Output</p>
+        <h2 class="card__title">Generated palette</h2>
+
+        <div id="color-wheel-panel" class="color-wheel-host color-wheel-host--output" aria-live="polite"></div>
+
+        <div id="swatch-grid" class="swatch-grid" aria-label="Color swatches"></div>
+      </div>
+
+      <div class="card card--charts">
+        <p class="card__callout">Chart previews</p>
+        <h2 class="card__title">Palette in context</h2>
+
+        <div class="chart-section">
+          <div class="chart-grid">
+            <figure class="chart-figure">
+              <div class="chart-cell" id="chart-pie" aria-hidden="true"></div>
+              <figcaption class="chart-caption">Pie</figcaption>
+            </figure>
+            <figure class="chart-figure">
+              <div class="chart-cell" id="chart-doughnut" aria-hidden="true"></div>
+              <figcaption class="chart-caption">Doughnut</figcaption>
+            </figure>
+            <figure class="chart-figure">
+              <div class="chart-cell" id="chart-horizontal" aria-hidden="true"></div>
+              <figcaption class="chart-caption">Horizontal bars</figcaption>
+            </figure>
+            <figure class="chart-figure">
+              <div class="chart-cell" id="chart-stacked" aria-hidden="true"></div>
+              <figcaption class="chart-caption">Stacked bar</figcaption>
+            </figure>
+            <figure class="chart-figure">
+              <div class="chart-cell" id="chart-grouped" aria-hidden="true"></div>
+              <figcaption class="chart-caption">Grouped bars</figcaption>
+            </figure>
+            <figure class="chart-figure">
+              <div class="chart-cell" id="chart-heatmap-grid" aria-hidden="true"></div>
+              <figcaption class="chart-caption">Heatmap grid</figcaption>
+            </figure>
+          </div>
+          <figure class="chart-figure chart-figure--wide">
+            <div class="chart-cell chart-cell--wide" id="chart-heatmap-ramp" aria-hidden="true"></div>
+            <figcaption class="chart-caption">Heatmap ramp</figcaption>
+          </figure>
+        </div>
+
+        <div class="chart-card-footer">
+          <div class="field field--inline-checkbox">
+            <label class="checkbox-field" for="include-base-color">
+              <input type="checkbox" id="include-base-color">
+              <span>Include base color in charts</span>
+            </label>
+            <span class="tip-wrap">
+              <button type="button" class="info-tip" aria-describedby="tip-include-base">?</button>
+              <span id="tip-include-base" role="tooltip" class="gem-tooltip">Charts only — does not change output swatches or copy-paste values. When on, chart previews lead with your base color. When off, the primary chart slot uses the complement (180°) instead of the base anchor.</span>
+            </span>
+          </div>
+          <div class="field field--toolbar" id="slice-count-field">
+            <div class="field__label-row">
+              <label class="field__label" for="slice-count">Slice count</label>
+              <span class="tip-wrap">
+                <button type="button" class="info-tip" aria-describedby="tip-slice-count">?</button>
+                <span id="tip-slice-count" role="tooltip" class="gem-tooltip">Number of colors in chart previews only. Output swatches follow the harmony pattern. Charts use saturated main hues before lighter variants — e.g. with 8 slices on 2× Tetradic, four saturated tetradic hues lead, then the four doubled offsets (not washed-out tints first).</span>
+              </span>
+            </div>
+            <select class="input select select--compact" id="slice-count">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <script src="js/color/convert.js?v=22"></script>
+  <script src="js/color/temperature.js?v=22"></script>
+  <script src="js/color/harmonies.js?v=22"></script>
+  <script src="js/color/brand-array.js?v=22"></script>
+  <script src="js/color/character.js?v=22"></script>
+  <script src="js/color/sequences.js?v=22"></script>
+  <script src="js/color/heatmap.js?v=22"></script>
+  <script src="js/color/engine.js?v=22"></script>
+  <script src="js/presets.js?v=22"></script>
+  <script src="js/color-wheel.js?v=22"></script>
+  <script src="js/charts.js?v=22"></script>
+  <script src="js/render.js?v=22"></script>
+  <script src="js/main.js?v=22"></script>
+</body>
+</html>

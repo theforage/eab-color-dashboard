@@ -1,0 +1,59 @@
+/* Gembox design tokens — from Figma Components (IgohaddARKIJHihXX0OE4Z) */
+:root {
+  /* Typography */
+  --gb-font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  --gb-font-weight-normal: 400;
+  --gb-font-weight-bold: 600;
+
+  --gb-text-xs: 0.75rem;
+  --gb-text-sm: 0.875rem;
+  --gb-text-md: 1rem;
+  --gb-text-lg: 1.125rem;
+  --gb-text-xl: 1.375rem;
+  --gb-text-2xl: 1.625rem;
+  --gb-text-3xl: 2.125rem;
+
+  --gb-leading-relaxed: 1.5;
+  --gb-leading-normal: 1.3;
+  --gb-leading-snug: 1.2;
+
+  /* Spacing */
+  --gb-spacing-4xs: 4px;
+  --gb-spacing-2xs: 8px;
+  --gb-spacing-xs: 10px;
+  --gb-spacing-sm: 12px;
+  --gb-spacing-md: 16px;
+  --gb-spacing-lg: 20px;
+  --gb-spacing-xl: 24px;
+  --gb-spacing-2xl: 32px;
+  --gb-spacing-3xl: 48px;
+  --gb-spacing-4xl: 64px;
+
+  /* UI colors */
+  --gb-ui-text: #3f3f3f;
+  --gb-ui-subtle: #757575;
+  --gb-ui-disabled: #949494;
+  --gb-ui-border: #e4e4e4;
+  --gb-ui-hover: #f7f7f7;
+  --gb-ui-background: #fbfbfb;
+  --gb-ui-white: #ffffff;
+
+  --gb-ui-action-primary: #1c6ab3;
+  --gb-ui-action-emphasis: #134c8b;
+  --gb-ui-action-background: #f6fafe;
+
+  --gb-ui-danger-primary: #d95958;
+  --gb-ui-danger-background: #fdf5f5;
+
+  --gb-ui-brand: #134c8b;
+
+  /* Layout */
+  --gb-max-content: 1280px;
+  --gb-aside-width: 320px;
+  --gb-radius-sm: 4px;
+  --gb-radius-md: 6px;
+  --gb-radius-lg: 8px;
+
+  /* Focus */
+  --gb-focus-ring: 0 0 0 2px var(--gb-ui-white), 0 0 0 4px var(--gb-ui-action-primary);
+}
