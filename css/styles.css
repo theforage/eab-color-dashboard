@@ -710,11 +710,11 @@ body {
   margin-bottom: 0;
 }
 
-.field--include-base.field--disabled {
+.field--exclude-base.field--disabled {
   opacity: 0.55;
 }
 
-.field--include-base.field--disabled .checkbox-field {
+.field--exclude-base.field--disabled .checkbox-field {
   cursor: not-allowed;
 }
 

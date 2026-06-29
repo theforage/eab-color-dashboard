@@ -16,7 +16,7 @@
     count: 4,
     outputFormat: "json",
     presetId: "friendly",
-    includeBaseColor: false,
+    excludeBaseColor: false,
   };
 
   let debounceTimer = null;
@@ -36,7 +36,7 @@
       characterDisabledHint: document.getElementById("character-disabled-hint"),
       colorWheelPanel: document.getElementById("color-wheel-panel"),
       countSelect: document.getElementById("slice-count"),
-      includeBaseColor: document.getElementById("include-base-color"),
+      excludeBaseColor: document.getElementById("exclude-base-color"),
       formatSelect: document.getElementById("output-format"),
       outputArea: document.getElementById("palette-output"),
       swatchGrid: document.getElementById("swatch-grid"),
@@ -192,8 +192,8 @@
     state.outputFormat = controls.formatSelect.value || "json";
     state.tonality = parseInt(controls.tonalitySlider.value, 10);
     state.energy = parseInt(controls.energySlider.value, 10);
-    if (controls.includeBaseColor) {
-      state.includeBaseColor = controls.includeBaseColor.checked;
+    if (controls.excludeBaseColor) {
+      state.excludeBaseColor = controls.excludeBaseColor.checked;
     }
 
     const hex = EABColor.convert.normalizeHex(controls.hexInput.value);
@@ -298,6 +298,19 @@
     return colors.slice(0, targetCount);
   }
 
+  function chartHeatmapFromColors(chartColors) {
+    return chartColors
+      .slice()
+      .sort(function (a, b) {
+        const la = a.hsl?.l ?? a.rank ?? 0;
+        const lb = b.hsl?.l ?? b.rank ?? 0;
+        return lb - la;
+      })
+      .map(function (c, i) {
+        return { index: i, hex: c.hex, hsl: c.hsl };
+      });
+  }
+
   function updateUI() {
     readStateFromUI();
 
@@ -319,16 +332,16 @@
     EABRender.showAlert(null, false);
 
     const isWelles = state.presetId === "orson-welles";
-    const includeBaseField = document.querySelector(".field--include-base");
-    if (controls.includeBaseColor) {
-      controls.includeBaseColor.disabled = isWelles;
+    const excludeBaseField = document.querySelector(".field--exclude-base");
+    if (controls.excludeBaseColor) {
+      controls.excludeBaseColor.disabled = isWelles;
       if (isWelles) {
-        controls.includeBaseColor.checked = false;
-        state.includeBaseColor = false;
+        controls.excludeBaseColor.checked = false;
+        state.excludeBaseColor = false;
       }
     }
-    if (includeBaseField) {
-      includeBaseField.classList.toggle("field--disabled", isWelles);
+    if (excludeBaseField) {
+      excludeBaseField.classList.toggle("field--disabled", isWelles);
     }
 
     const patternCount = EABColor.harmonies.getPatternColorCount(state.harmonyType);
@@ -339,17 +352,15 @@
       ? palette.categorical.slice(0, chartCount)
       : applyBaseColorOption(
           palette,
-          state.includeBaseColor,
+          !state.excludeBaseColor,
           chartCount,
           state.harmonyType
         );
     const outputColors = outputPalette.categorical.slice(0, patternCount);
-    const chartPalette = Object.assign({}, palette, { categorical: chartColors });
-    if (isWelles) {
-      chartPalette.heatmap = chartColors.map(function (c) {
-        return { hex: c.hex, hsl: c.hsl };
-      });
-    }
+    const chartPalette = Object.assign({}, palette, {
+      categorical: chartColors,
+      heatmap: chartHeatmapFromColors(chartColors),
+    });
 
     EABColorWheel.render(controls.colorWheelPanel, {
       baseHsl: palette.adjusted,
@@ -450,8 +461,8 @@
     controls.tonalitySlider.addEventListener("input", scheduleUpdate);
     controls.energySlider.addEventListener("input", scheduleUpdate);
     controls.countSelect.addEventListener("change", scheduleUpdate);
-    if (controls.includeBaseColor) {
-      controls.includeBaseColor.addEventListener("change", scheduleUpdate);
+    if (controls.excludeBaseColor) {
+      controls.excludeBaseColor.addEventListener("change", scheduleUpdate);
     }
     controls.formatSelect.addEventListener("change", function () {
       readStateFromUI();

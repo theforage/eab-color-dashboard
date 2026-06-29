@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/tokens.css?v=26">
-  <link rel="stylesheet" href="css/styles.css?v=26">
+  <link rel="stylesheet" href="css/tokens.css?v=27">
+  <link rel="stylesheet" href="css/styles.css?v=27">
 </head>
 <body>
   <div id="prototype-gate" class="gate-overlay" hidden>
@@ -206,14 +206,14 @@
         </div>
 
         <div class="chart-card-footer">
-          <div class="field field--inline-checkbox field--include-base">
-            <label class="checkbox-field" for="include-base-color">
-              <input type="checkbox" id="include-base-color">
-              <span>Include base color in charts</span>
+          <div class="field field--inline-checkbox field--exclude-base">
+            <label class="checkbox-field" for="exclude-base-color">
+              <input type="checkbox" id="exclude-base-color">
+              <span>Exclude base color from charts</span>
             </label>
             <span class="tip-wrap">
-              <button type="button" class="info-tip" aria-describedby="tip-include-base">?</button>
-              <span id="tip-include-base" role="tooltip" class="gem-tooltip">Charts only — does not change output swatches or copy-paste values. When on, chart previews lead with your base color. When off, the primary chart slot uses the complement (180°) instead of the base anchor.</span>
+              <button type="button" class="info-tip" aria-describedby="tip-exclude-base">?</button>
+              <span id="tip-exclude-base" role="tooltip" class="gem-tooltip">Charts only — does not change output swatches or copy-paste values. Chart previews include your base color by default. When checked, the base is removed and the primary chart slot uses the complement (180°) instead.</span>
             </span>
           </div>
           <div class="field field--toolbar" id="slice-count-field">
@@ -241,18 +241,18 @@
     </article>
   </div>
 
-  <script src="js/color/convert.js?v=26"></script>
-  <script src="js/color/temperature.js?v=26"></script>
-  <script src="js/color/harmonies.js?v=26"></script>
-  <script src="js/color/brand-array.js?v=26"></script>
-  <script src="js/color/character.js?v=26"></script>
-  <script src="js/color/sequences.js?v=26"></script>
-  <script src="js/color/heatmap.js?v=26"></script>
-  <script src="js/color/engine.js?v=26"></script>
-  <script src="js/presets.js?v=26"></script>
-  <script src="js/color-wheel.js?v=26"></script>
-  <script src="js/charts.js?v=26"></script>
-  <script src="js/render.js?v=26"></script>
-  <script src="js/main.js?v=26"></script>
+  <script src="js/color/convert.js?v=27"></script>
+  <script src="js/color/temperature.js?v=27"></script>
+  <script src="js/color/harmonies.js?v=27"></script>
+  <script src="js/color/brand-array.js?v=27"></script>
+  <script src="js/color/character.js?v=27"></script>
+  <script src="js/color/sequences.js?v=27"></script>
+  <script src="js/color/heatmap.js?v=27"></script>
+  <script src="js/color/engine.js?v=27"></script>
+  <script src="js/presets.js?v=27"></script>
+  <script src="js/color-wheel.js?v=27"></script>
+  <script src="js/charts.js?v=27"></script>
+  <script src="js/render.js?v=27"></script>
+  <script src="js/main.js?v=27"></script>
 </body>
 </html>
