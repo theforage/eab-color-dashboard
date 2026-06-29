@@ -21,10 +21,6 @@
 
   let debounceTimer = null;
   let applyingPreset = false;
-  let achromaticRedirect = false;
-
-  const ACHROMATIC_ALERT =
-    "This base has no hue (black, white, or neutral gray). Switched to Orson Welles — the Forage brand array (15%–90% lightness steps).";
 
   function getControls() {
     return {
@@ -130,18 +126,6 @@
       tab.setAttribute("aria-selected", "false");
       tab.classList.remove("tabs__tab--active");
     });
-  }
-
-  function maybeRedirectAchromatic(palette) {
-    if (achromaticRedirect || applyingPreset) return false;
-    if (!palette.achromatic) return false;
-    if (state.presetId === "orson-welles" && state.harmonyType === "brand-array") {
-      return false;
-    }
-    achromaticRedirect = true;
-    applyPreset("orson-welles");
-    achromaticRedirect = false;
-    return true;
   }
 
   function applyPreset(id) {
@@ -332,29 +316,40 @@
       return;
     }
 
-    if (maybeRedirectAchromatic(palette)) {
-      EABRender.showAlert(ACHROMATIC_ALERT, true);
-      return;
-    }
+    EABRender.showAlert(null, false);
 
-    if (palette.achromatic && state.presetId === "orson-welles") {
-      EABRender.showAlert(ACHROMATIC_ALERT, true);
-    } else {
-      EABRender.showAlert(null, false);
+    const isWelles = state.presetId === "orson-welles";
+    const includeBaseField = document.querySelector(".field--include-base");
+    if (controls.includeBaseColor) {
+      controls.includeBaseColor.disabled = isWelles;
+      if (isWelles) {
+        controls.includeBaseColor.checked = false;
+        state.includeBaseColor = false;
+      }
+    }
+    if (includeBaseField) {
+      includeBaseField.classList.toggle("field--disabled", isWelles);
     }
 
     const patternCount = EABColor.harmonies.getPatternColorCount(state.harmonyType);
     const outputPalette = buildPaletteFromState(patternCount);
 
     const chartCount = isBrand ? 10 : state.count;
-    const chartColors = applyBaseColorOption(
-      palette,
-      state.includeBaseColor,
-      chartCount,
-      state.harmonyType
-    );
+    const chartColors = isWelles
+      ? palette.categorical.slice(0, chartCount)
+      : applyBaseColorOption(
+          palette,
+          state.includeBaseColor,
+          chartCount,
+          state.harmonyType
+        );
     const outputColors = outputPalette.categorical.slice(0, patternCount);
     const chartPalette = Object.assign({}, palette, { categorical: chartColors });
+    if (isWelles) {
+      chartPalette.heatmap = chartColors.map(function (c) {
+        return { hex: c.hex, hsl: c.hsl };
+      });
+    }
 
     EABColorWheel.render(controls.colorWheelPanel, {
       baseHsl: palette.adjusted,

@@ -121,10 +121,10 @@
     },
     "orson-welles": {
       id: "orson-welles",
-      label: "Orson Welles",
-      tagline: "Noir black brand ramp",
+      label: "Orson Welles (Monochrome)",
+      tagline: "Noir mono array",
       description:
-        "What would Welles do? Noir brand ramp — darkest valid anchor (15% lightness) on the Forage 10-step array.",
+        "Noir monochrome ramp — darkest valid anchor (15% lightness) on the Forage 10-step array. Charts use the ramp only.",
       harmonyType: "brand-array",
       lockHarmony: true,
       baseHex: "#262626",
