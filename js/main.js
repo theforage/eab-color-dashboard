@@ -248,16 +248,30 @@
     const isBrand = harmonyType === "brand-array";
 
     if (includeBase) {
-      colors = colors.filter(function (c) {
-        return c.hex.toLowerCase() !== baseHex;
-      });
-      colors.unshift({
-        hex: palette.adjusted.hex,
-        hsl: { h: palette.adjusted.h, s: palette.adjusted.s, l: palette.adjusted.l },
-        rank: palette.adjusted.l,
-        index: 0,
-        isBase: true,
-      });
+      if (isBrand) {
+        colors = colors.filter(function (c) {
+          return c.hex.toLowerCase() !== baseHex;
+        });
+        colors.unshift({
+          hex: palette.adjusted.hex,
+          hsl: { h: palette.adjusted.h, s: palette.adjusted.s, l: palette.adjusted.l },
+          rank: palette.adjusted.l,
+          index: 0,
+          isBase: true,
+        });
+      } else if (colors.length > 0) {
+        colors[0] = {
+          hex: palette.adjusted.hex,
+          hsl: { h: palette.adjusted.h, s: palette.adjusted.s, l: palette.adjusted.l },
+          rank: palette.adjusted.l,
+          index: colors[0].index ?? 0,
+          isBase: true,
+        };
+        colors = colors.filter(function (c, i) {
+          if (i === 0) return true;
+          return c.hex.toLowerCase() !== baseHex;
+        });
+      }
     } else if (isBrand) {
       colors = colors.filter(function (c) {
         return c.hex.toLowerCase() !== baseHex;
